@@ -1,0 +1,5 @@
+toto="titi"
+
+group ("tutu") do
+    titi="tata"  + toto
+end
