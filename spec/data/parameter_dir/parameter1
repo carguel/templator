@@ -1,0 +1,4 @@
+export :parameter1 => "value1"
+group "group1" do
+    export :parameter2 => "value2"
+end

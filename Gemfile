@@ -1,8 +1,10 @@
 source :rubygems
 
 gem "thor"
-gem "ParseTree"
-gem "sourcify"
+
+group :development do
+  gem "yard" 
+end
 
 group :test do
   gem "rspec"

@@ -18,10 +18,22 @@ class TemplatorCli < Thor
   # Root directory to prepend to relative paths
   source_root(Dir.pwd)
 
-  desc :start, "Start templator"
-  method_option "parameter-files", :aliases => "-p", :type => :array, :desc => "list of files and directories, that defines parameters"
-  method_option "context", :aliases => '-c', :type => :string, :desc => "context name prepended to variable name to resolve variable in param actions"
-  def start(template, output)
+  #
+  # THOR TASK gen
+  # Generate a file from a template
+  # 
+  desc "gen TEMPLATE OUTPUT", "Generate a file from a template"
+  method_option "parameter-files", 
+                :aliases => "-p", 
+                :type => :array, 
+                :desc => "list of files and directories, that defines parameters"
+  method_option "context", 
+                :aliases => '-c', 
+                :type => :string, 
+                :desc => "context name prepended to parameter name from template (action <%=param name%>)"
+  def gen(template, output)
+    
+    @template = template
 
     if options.has_key?("parameter-files")
       @parameters = Templator::Parameters.load_files *options["parameter-files"]
@@ -30,6 +42,41 @@ class TemplatorCli < Thor
     template template, output
   end
 
+  
+  #
+  # THOR TASK get_param
+  # Get the value of a parameter from provided parameter files.
+  # 
+  desc "get_param PARAMETER_NAME", "Get a parameter value"
+  method_option "parameter-files", 
+                :aliases => "-p", 
+                :required => true, 
+                :type => :array, 
+                :desc => "list of files and directories, that defines parameters"
+  method_option "context", 
+                :aliases => '-c', 
+                :type => :string, 
+                :desc => "context name prepended to parameter name from template (action <%=param name%>)"
+  def get_param(parameter_name)
+
+      if options.has_key?("parameter-files")
+        @parameters = Templator::Parameters.load_files *options["parameter-files"]
+      end
+
+      begin
+        puts param(parameter_name)
+      rescue
+        STDERR.puts "%{parameter_name} is not defined"
+        exit 1
+      end
+
+      exit 0
+  end
+
+
+  #
+  # Internal methods
+  #
   no_tasks do
 
     def parameters
@@ -38,6 +85,10 @@ class TemplatorCli < Thor
 
     def context
       @options["context"]
+    end
+
+    def search_path
+      [File.expand_path(File.dirname(@template))]
     end
 
     def method_missing(method, *args)

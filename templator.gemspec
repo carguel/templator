@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "templator"
-  s.version = "0.1"
+  s.version = "0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
   s.author = "Christophe Arguel"
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.summary = "A command line template engine tool"
   s.description = File.read(File.join(File.dirname(__FILE__), 'README'))
   s.platform = Gem::Platform::RUBY
-  s.files = Dir['[A-Z]*']
+  s.files = Dir['[A-Z]*', 'lib/**/*']
   s.require_paths = ["lib"]
   s.bindir = 'bin'
   s.executables << 'templator.rb'

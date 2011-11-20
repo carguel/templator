@@ -1,5 +1,7 @@
-toto="titi"
+export :toto => 'toto'
 
-group ("tutu") do
-    titi="tata"  + toto
+group :tutu do
+    group :titi do
+        export :foo => "bar"
+    end
 end

@@ -1,4 +1,0 @@
- * rework of the DslContext and Group, maybe the top level context should be a Group too.
- * define finer-grained test : one spec for each class, currently there is only one spec for Parameters, DslContext, and Group
- * have more consistent name : Parameters -> ParameterLoader, ParameterHierarchy -> Parameters
- 
