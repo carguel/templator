@@ -5,14 +5,15 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
   s.author = "Christophe Arguel"
   s.email = "christophe.arguel@free.fr"
+  s.homepage = "https://github.com/carguel/templator"
   s.summary = "A command line tool allowing to generate text documents from ERB template"
-  s.description = File.read(File.join(File.dirname(__FILE__), 'README'))
+  s.description = File.read(File.join(File.dirname(__FILE__), 'README.md'))
   s.platform = Gem::Platform::RUBY
   s.files = Dir['[A-Z]*', 'lib/**/*']
   s.require_paths = ["lib"]
   s.bindir = 'bin'
   s.executables << 'templator'
-  s.extra_rdoc_files = ["CHANGES", "LICENSE", "README", "TODO"]
+  s.extra_rdoc_files = ["CHANGES", "LICENSE", "README.md", "TODO"]
   s.test_files = Dir['spec/**/*_spec.rb']
 
   if s.respond_to? :specification_version then
