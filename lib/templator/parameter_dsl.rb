@@ -4,6 +4,7 @@ module Templator
   # Supported DSL methods are :
   # * export(hash) : defines a list of parameters from the given hash
   # * group(name, block) : defines a group of parameter
+  # * include_group(name) : include parameters and sub groups the given group into the current group
   #
   # =Example
   # With the following code :
@@ -14,7 +15,13 @@ module Templator
   #  end
   #  group "group2" do
   #    export :param5 => group1.param4
+  #    group "group3" do
+  #      export :param6 => "value6"
+  #    end
   #  end  
+  #  group "group4" do
+  #    include_group "group2.group3"
+  #  end
   #
   #
   # param5 value can retrieved with the following :
@@ -50,13 +57,25 @@ module Templator
       end
     end
 
-    # Defines a group of parameters
+    # Defines a group of parameters.
     # @param [#to_s] name name of the group
     # @yield group block definition
     def group(name)
       enter_group name.to_s
       yield
       leave_group
+    end
+
+    # Includes all parameters and sub groups of a given group into the current group.
+    # @param [Group,#to_s] group group to include
+    def include_group(group)
+      source_group = group
+      if ! group.kind_of? Group
+        source_group = get_group group.to_s
+      end
+      source_group.singleton_methods.each do |method|
+        define_method_in_current_group(method) {source_group.send(method)}
+      end
     end
 
     private
@@ -73,7 +92,7 @@ module Templator
     # @param [#to_s] name of the new group
     #
     def enter_group(name)
-      group = Group.new(name)
+      group = group_in_current_context(name) || Group.new(name)
       define_method_in_current_group(name) {group}
       @group_stack.push(group)
     end
@@ -82,27 +101,44 @@ module Templator
     # @param [#to_s] method_name name of the method to define.
     # @param [Block] method_block block of the méthode to define
     def define_method_in_current_group(method_name, &method_block)
-        (class << current_group; self; end).send(:define_method, method_name, method_block)
-    end
-
-    # Manages the exit from a group
-    def leave_group
-      @group_stack.pop
-    end
-
-    # Manages the access to a parameter outside of the current group
-    def method_missing(name, *args)
-      @group_stack.first.send(name, *args)
-    end
-
+      (class << current_group; self; end).send(:define_method, method_name, method_block)
   end
 
-  # Base class to define a group.
-  # A Group instance is created whenever a group method is parsed from the DSL code.
-  # Methods are dynamically created inside the singleton of the instance to access nested parameters and groups.
-  class Group
-    def initialize(name)
-      @name = name
-    end
+  # Verify if a group belongs to the current group
+  # @param [#to_s] name name of the group to control
+  # @return the group with the given name if it belongs to the current group, nil otherwise
+  def group_in_current_context(name)
+    current_group.respond_to?(name) ? current_group.send(name) : nil
   end
+
+  # Manages the exit from a group
+  def leave_group
+    @group_stack.pop
+  end
+
+  # Manages the access to a parameter outside of the current group
+  def method_missing(name, *args)
+    @group_stack.first.send(name, *args)
+  end
+
+  # Get a group from its fully qualified name
+  def get_group(fully_qualified_name)
+    fully_qualified_name.to_s.split('.').inject(top_level_group) {|result, name| result.send(name)}
+  end
+
+  # Return the top level goup
+  def top_level_group
+    @group_stack.first
+  end
+
+end
+
+# Base class to define a group.
+# A Group instance is created whenever a group method is parsed from the DSL code.
+# Methods are dynamically created inside the singleton of the instance to access nested parameters and groups.
+class Group
+  def initialize(name)
+    @name = name
+  end
+end
 end
