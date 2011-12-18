@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "templator"
-  s.version = "0.3"
+  s.version = "0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
   s.author = "Christophe Arguel"
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.files = Dir['[A-Z]*', 'lib/**/*']
   s.require_paths = ["lib"]
   s.bindir = 'bin'
-  s.executables << 'templator.rb'
+  s.executables << 'templator'
   s.extra_rdoc_files = ["CHANGES", "LICENSE", "README", "TODO"]
   s.test_files = Dir['spec/**/*_spec.rb']
 
