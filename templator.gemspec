@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
   s.author = "Christophe Arguel"
   s.email = "christophe.arguel@free.fr"
-  s.summary = "A command line template engine tool"
+  s.summary = "A command line tool allowing to generate text documents from ERB template"
   s.description = File.read(File.join(File.dirname(__FILE__), 'README'))
   s.platform = Gem::Platform::RUBY
   s.files = Dir['[A-Z]*', 'lib/**/*']

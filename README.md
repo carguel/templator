@@ -279,3 +279,8 @@ Command line execution from shell:
     do
         templator gen interfaces.txt interfaces.$host -p hosts.txt -c $host
     done
+
+Copyright
+---------
+
+Copyright © 2011 Christophe Arguel. See LICENSE for details.
