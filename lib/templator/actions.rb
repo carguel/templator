@@ -5,11 +5,20 @@ module Templator
 
   module Actions
 
-    def param(varname)
+    def param(name)
       begin
-        parameters.get(varname)
+        parameters.get(name)
       rescue NoMethodError => e
-        parameters.get("#{context}.#{varname}")
+        parameters.get("#{context}.#{name}")
+      end
+    end
+
+    def param_exists?(name)
+      begin
+        param(name)
+        true
+      rescue
+        false
       end
     end
 
