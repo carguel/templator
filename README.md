@@ -37,12 +37,13 @@ Here is the most simple command line invokation.
     
     $ templator gen path/to/template path/to/target
 
-If parameters are defined in some files, they can be passed to the template with the __-p__ switch:
+Files that define parameters can be passed to Templator with the __-p__ switch:
 
     $ templator gen path/to/template path/to/target -p path/to/paramaters1 path/to/parameters2
 
-As shown in this example, the parameters can live in multiple files. The parameter files are parsed
-in the same order they are provided in the command line.
+When parameter files are passed, Templator firstly parses these files with respect to the Parameter DSL (see below).
+Files are parsed in the same order that they are provided by the __-p__ switch. 
+All parameters exported from these files are then visible by the template.
 
 The __-c__ switch allows to define a default context from which Templator will try to
 resolve parameter names that are not fully qualified in the template. More details are provided
@@ -110,17 +111,22 @@ Nested group is also possible:
         }
     }
 
-When using group, parameters have to be referenced with their fully qualified name in dot notation.
+Value of parameters defined in other groups must be retrieved with 
+the fully qualified name of the parameter in dot notation.
 
-    group :foo {
-        export :parameter => "foo"
+    group :foo_group {
+        export :foo => "foo"
     }
 
-    group :bar {
-        export :parameter = foo.first_parameter + "bar"
+    group :bar_group {
+        export :bar => "bar"
     }
 
-A group can de defined in multiple places, the resulting group is a merge of all
+    group :foobar_group {
+        export :foobar => foo_group.foo + bar_group.bar
+    }
+
+A group can de defined multiple times. The resulting group is a merge of all
 definitions taking into account the order of the parsing:
 
     #file1
@@ -173,11 +179,11 @@ Template Actions
 
 As said before, the template language used by Templator is ERB.
 
-In addition, the following extra methods can be invoked from a template:
+In addition to the features provided by ERB, the following extra methods can be invoked from a template:
 
  * __param__
 
-This method allows to access the value of a parameter. 
+This method allows to retrieve the value of a parameter. 
 
 Here is a concrete example:
 
@@ -193,6 +199,7 @@ File _template.txt_:
     The value of the parameter "my_parameter" defined in the group "my_group" is <%= param "my_group.my_parameter" %>
 
 Command line invokation from the shell:
+
     $ templator gen template.txt output -p parameters.txt
 
 The resulting _output_ file should have the following content:
