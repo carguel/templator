@@ -99,56 +99,56 @@ and :parameter2 is gotten by invoking the corresponding methods, parameter1 et p
 
 The group method allows to define a subset of parameters.
 
-    group :my_group {
+    group :my_group do
         export :my_parameter => "my_value"
-    }
+    end
 
 Nested group is also possible:
 
-    group :top {
-        group :inner {
+    group :top do
+        group :inner do
             ...
-        }
-    }
+        end
+    end
 
 Value of parameters defined in other groups must be retrieved with 
 the fully qualified name of the parameter in dot notation.
 
-    group :foo_group {
+    group :foo_group do
         export :foo => "foo"
-    }
+    end
 
-    group :bar_group {
+    group :bar_group do
         export :bar => "bar"
-    }
+    end
 
-    group :foobar_group {
+    group :foobar_group do
         export :foobar => foo_group.foo + bar_group.bar
-    }
+    end
 
 A group can de defined multiple times. The resulting group is a merge of all
 definitions taking into account the order of the parsing:
 
     #file1
-    group :my_group {
+    group :my_group do
         export :parameter1 => 1
         export :parameter2 => 2
-    }
+    end
 
     #file2
-    group :my_group {
+    group :my_group do
         export :parameter1 => 0.99999
         export :parameter3 => 3
-    }
+    end
 
 Assuming that file1 and file2 are parsed in this order, the resulting group 
 is semantically equivalent to this one:
 
-    group :my_group {
+    group :my_group do
         export :parameter1 => 0.99999
         export :parameter2 => 2
         export :parameter3 => 3
-    }
+    end
 
  * __include_group__
 
@@ -158,21 +158,21 @@ It is conceptually equivalent to the well known Ruby include method.
 
 Consider the following example:
 
-    group :mixin {
+    group :mixin do
         export :mixme => "some value"
-    }
+    end
 
-    group :my_group {
+    group :my_group do
         include_group :mixin
         export :another_parameter => "another_value"
-    }
+    end
 
 Thus, the resulting group is equivalent to :
 
-    group :my_group {
+    group :my_group do
         export :mixme => "some value"
         export :another_parameter => "another_value"
-    }
+    end
 
 Template Actions
 ----------------
@@ -189,9 +189,9 @@ Here is a concrete example:
 
 File _parameters.txt_:
 
-    group :my_group {
+    group :my_group do
         export :my_parameter => "my_value"
-    }
+    end
     ...
 
 File _template.txt_:
@@ -255,27 +255,27 @@ file for three different hosts.
 
 File _hosts.txt_:
 
-    group :common_parameters {
+    group :common_parameters do
         export :gateway => "192.168.121.254"
-    }
+    end
 
-    group :host_a {
+    group :host_a do
         export :address => "192.168.121.1"
         export :netmask => "255.255.255.0"
         include_group :common_parameters
-    }
+    end
 
-    group :host_b {
+    group :host_b do
         export :address => "192.168.121.2"
         export :netmask => "255.255.255.0"
         include_group :common_parameters
-    }
+    end
 
-    group :host_c {
+    group :host_c do
         export :address => "192.168.121.3"
         export :netmask => "255.255.255.0"
         include_group :common_parameters
-    }
+    end
 
 File _interfaces.txt_:
 
