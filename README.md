@@ -183,14 +183,14 @@ In addition to the features provided by ERB, the following extra methods can be 
 
  * __param__
 
-This method allows to retrieve the value of a parameter. 
+This method allows to retrieve the value of parameters passed to Templator by the __-p__ swicth. 
 
 Here is a concrete example:
 
 File _parameters.txt_:
 
     group :my_group {
-        export my_parameter => "my_value"
+        export :my_parameter => "my_value"
     }
     ...
 
@@ -229,7 +229,7 @@ Here is an example that dynamically generates the name of the template to
 include according to the value of a parameter:
 
     blah blah blah
-    <%= include_file "#{param :my_parameter}.txt"
+    <%= include_file "#{param :my_parameter}.txt" %>
 
 The path of the template to include is interpreted relatively from the path
 of the source template. 
@@ -255,22 +255,26 @@ file for three different hosts.
 
 File _hosts.txt_:
 
-    group :host_a {
-        export :address => "192.168.121.1"
-        export :netmask => "255.255.255.0"
+    group :common_parameters {
         export :gateway => "192.168.121.254"
     }
 
-    group :host_b {
-        export :address => "192.168.122.1"
+    group :host_a {
+        export :address => "192.168.121.1"
         export :netmask => "255.255.255.0"
-        export :gateway => "192.168.122.254"
+        include_group :common_parameters
+    }
+
+    group :host_b {
+        export :address => "192.168.121.2"
+        export :netmask => "255.255.255.0"
+        include_group :common_parameters
     }
 
     group :host_c {
-        export :address => "192.168.123.1"
+        export :address => "192.168.121.3"
         export :netmask => "255.255.255.0"
-        export :gateway => "192.168.123.254"
+        include_group :common_parameters
     }
 
 File _interfaces.txt_:
