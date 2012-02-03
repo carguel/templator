@@ -28,7 +28,7 @@ module Templator
         search_path.each do |dir|
           path = File.join(dir, filename)
           if File.exist?(path) 
-            content = ERB.new(::File.read(path), nil, '-', '@included_template').result(binding)
+            content = ERB.new(::File.read(path), nil, '-', 'included_template').result(binding)
             throw :file_found
           end
         end

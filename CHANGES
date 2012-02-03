@@ -1,0 +1,6 @@
+= 0.1.1 / 2012-02-03
+    * Fix bug when doing recursive calls to include_file action,
+      only the result of the last call was included in the generated file. 
+
+= 0.1 
+    * First release
