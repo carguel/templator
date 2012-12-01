@@ -31,5 +31,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<rake>, [">= 0.9"])
   s.add_development_dependency(%q<rspec>, ["~> 2.12.0"])
   s.add_development_dependency(%q<yard>, ["~> 0.8.3"])
+  s.add_development_dependency(%q<redcarpet>, ["~> 2.2.2"])
   s.add_runtime_dependency(%q<thor>, ["~>0.16.0"])
 end
