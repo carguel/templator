@@ -1,10 +1,9 @@
 module Templator
 
-  class ParameterCodeLoader
+  class ParameterFileSelector
 
-    def self.load_code_from(*paths)
+    def self.select_parameter_files(*paths)
       files = get_candidate_files paths
-      code = concatenate_content_of files
     end
 
     private 
@@ -34,17 +33,6 @@ module Templator
     def self.get_files_from_directory(directory)
       Dir["#{directory}/*"].sort.select do |file|
         File.file? file
-      end
-    end
-
-    # Concatenates the content of the given files.
-    # @param [Array<String>] files array of files to process
-    # @return [String] the content concatenated of all given files
-    def self.concatenate_content_of(files)
-      files.inject("") do |content, file| 
-        content += File.read(file) 
-        content += "\n" unless content[-1, 1] == "\n"
-        content
       end
     end
   end

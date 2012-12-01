@@ -30,7 +30,7 @@ module Templator
 
     describe "#param" do
 
-      context ", when no context is provided," do
+      context "when no context is provided," do
         it "should retrieve from the #parameters instance the value of the provided parameter name" do
 
           parameters = mock(:parameters)
@@ -43,7 +43,7 @@ module Templator
         end
       end
 
-      context ", when a context is defined in the includer" do
+      context "when a context is defined in the includer" do
 
         before do
             @parameters = mock(:parameters)
