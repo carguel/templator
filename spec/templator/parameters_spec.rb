@@ -8,19 +8,15 @@ module Templator
 
     describe "#load_files" do
 
+      it "should load the given file and return a Parameters instance" do
+        path = File.join(parameter_dir_path, 'parameter1')
 
-      context "parameter files that contain only simple parameter definitions" do
+        parameters = Parameters.load_files(path)
 
-        it "should load the given file and return a Parameters instance" do
-          path = File.join(parameter_dir_path, 'parameter1')
+        parameters.should be_kind_of Parameters
 
-          parameters = Parameters.load_files(path)
-
-          parameters.should be_kind_of Parameters
-
-          parameters.get(:parameter1).should == 'value1'
-          parameters.get("group1.parameter2").should == 'value2'
-        end
+        parameters.get(:parameter1).should == 'value1'
+        parameters.get("group1.parameter2").should == 'value2'
       end
     end
   end
