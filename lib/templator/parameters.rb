@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'templator/parameter_code_loader'
+require 'templator/parameter_file_selector'
 require 'templator/parameter_dsl'
 
 module Templator
@@ -18,24 +18,24 @@ module Templator
     #  to parameters defined in loaded files.
     def self.load_files(*paths)
 
-      code = ParameterCodeLoader.load_code_from(*paths)
+      files = ParameterFileSelector.select_parameter_files(*paths)
 
       parameters = Parameters.new
-      parameters.load(code)
+      parameters.load(files)
       return parameters
     end
 
     # Retrieves the value of a variable
-    # defined in the parameter files previously loaded
+    # defined in the parameter files previously loaded.
     # @param [#to_s] var the fully qualified name of the variable (in dot notation)
     def get(var)
       var.to_s.split('.').inject(@parameters) {|result, element| result.send(element)} 
     end
 
-    # Loads code in a fresh context
-    # @param [String ] code code to load
-    def load(code)
-      @parameters = Templator::ParameterDsl.new.parse(code)
+    # Loads parameters from provided files.
+    # @param [Array<String>] files files to load.
+    def load(files)
+      @parameters = Templator::ParameterFileLoader.new.parse(*files)
     end
   end
 end

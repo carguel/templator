@@ -38,7 +38,12 @@ class TemplatorCli < Thor
     @template = template
 
     if options.has_key?("parameter-files")
-      @parameters = Templator::Parameters.load_files *options["parameter-files"]
+      begin
+        @parameters = Templator::Parameters.load_files *options["parameter-files"]
+      rescue Exception => e
+        error e
+        exit 1
+      end
     end
 
     template template, output
