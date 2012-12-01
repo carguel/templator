@@ -1,3 +1,7 @@
+= 0.2.1
+    * Fix gemspec errors
+= 0.2
+    * Refactor the Parameter DSL loading mechanism in order to display more comprehensible error messages.
 = 0.1.1 / 2012-02-03
     * Fix bug when doing recursive calls to include_file action,
       only the result of the last call was included in the generated file. 
